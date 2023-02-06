@@ -1,0 +1,5 @@
+config==0.5.1
+feedparser==6.0.10
+psycopg2==2.9.3
+pyTelegramBotAPI==4.10.0
+schedule==1.1.0
