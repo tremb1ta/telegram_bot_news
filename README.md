@@ -1,3 +1,6 @@
+[![Technology & Economics](https://img.shields.io/twitter/url?label=Technology%20%26%20Economics&logo=Telegram&style=social&url=https%3A%2F%2Ft.me%2Ftechnology_and_economics)](https://t.me/technology_and_economics)
+[![Worldwide News](https://img.shields.io/twitter/url?label=Worldwide%20News&logo=Telegram&style=social&url=https%3A%2F%2Ft.me%2Ftechnology_and_economics)](https://t.me/worldwide_news_trembita)
+
 # RSS Bot
 
 This is a Python script that fetches the latest entries from multiple RSS feeds and posts them to Telegram channels using the `pyTelegramBotAPI` library. The sent links are stored in a PostgreSQL database and checked to avoid posting duplicates. Old entries are deleted after 9 days.
