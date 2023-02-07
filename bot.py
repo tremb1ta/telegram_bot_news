@@ -98,8 +98,8 @@ def delete_old_entries():
 
 # Schedule the task to run every 1 minute
 schedule.every(1).minutes.do(send_new_entries, bot1, channel_id1, rss_feeds_wide1)
-schedule.every(1).minutes.do(send_new_entries, bot1, channel_id1, rss_feeds_wide2)
-schedule.every(1).minutes.do(send_new_entries_no_description, bot2, channel_id2, rss_feeds_techonomy1)
+schedule.every(1).minutes.do(send_new_entries_no_description, bot1, channel_id1, rss_feeds_wide2)
+schedule.every(1).minutes.do(send_new_entries, bot2, channel_id2, rss_feeds_techonomy1)
 schedule.every(1).minutes.do(send_new_entries_no_description, bot2, channel_id2, rss_feeds_techonomy2)
 
 # Schedule the task to run every 5 days
