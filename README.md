@@ -1,30 +1,48 @@
-[![Technology & Economics](https://img.shields.io/twitter/url?label=Technology%20%26%20Economics&logo=Telegram&style=social&url=https%3A%2F%2Ft.me%2Ftechnology_and_economics)](https://t.me/technology_and_economics)
-[![Worldwide News](https://img.shields.io/twitter/url?label=Worldwide%20News&logo=Telegram&style=social&url=https%3A%2F%2Ft.me%2Ftechnology_and_economics)](https://t.me/worldwide_news_trembita)
+[![Tech News](https://img.shields.io/twitter/url?label=Tech%20News&logo=Telegram&style=social&url=https%3A%2F%2Ft.me%2Ftech_news_tremb1ta)](https://t.me/tech_news_tremb1ta)
+[![Economics News](https://img.shields.io/twitter/url?label=Economics%20News&logo=Telegram&style=social&url=https%3A%2F%2Ft.me%2Feconomics_news_tremb1ta)](https://t.me/economics_news_tremb1ta)
+[![Worldwide News](https://img.shields.io/twitter/url?label=Worldwide%20News&logo=Telegram&style=social&url=https%3A%2F%2Ft.me%2Fworldwide_news_tremb1ta)](https://t.me/worldwide_news_tremb1ta)
+[![Ukraine News](https://img.shields.io/twitter/url?label=Ukraine%20News&logo=Telegram&style=social&url=https%3A%2F%2Ft.me%2Fukraine_news_tremb1ta)](https://t.me/ukraine_news_tremb1ta)
+
 
 # RSS Bot
 
-This is a Python script that fetches the latest entries from multiple RSS feeds and posts them to Telegram channels using the `pyTelegramBotAPI` library. The sent links are stored in a PostgreSQL database and checked to avoid posting duplicates. Old entries are deleted after 9 days.
+A Telegram bot that sends latest news articles from selected RSS feeds to designated Telegram channels. This bot utilizes the `feedparser` library to parse the RSS feeds, `pyTelegramBotAPI` library to interact with Telegram API, `schedule` library to schedule tasks, and `psycopg2` library to store information in a PostgreSQL database. The bot also includes error logging functionality with the `logging` library.
 
-## Required Libraries
+## Requirements
 
+-   Python 3.6 or higher
 -   `feedparser`
 -   `telebot`
 -   `schedule`
 -   `psycopg2`
 -   `logging`
 -   `datetime`
+-   A Telegram bot token and access to desired Telegram channels
+-   A PostgreSQL database
 
 ## Configuration
 
-Before running the script, you need to set the following variables in `config.py`:
+You will need to configure the following in `db_config.py` file:
+```python
+host = "<host>"
+dbname = "<dbname>"
+user = "<user>"
+password = "<password>"
+```
 
--   `channel_id1` and `bot_token1`: the ID of the first Telegram channel and the API token of the bot that will post to it.
--   `channel_id2` and `bot_token2`: the ID of the second Telegram channel and the API token of the bot that will post to it.
--   `rss_feeds_wide1`, `rss_feeds_wide2`, `rss_feeds_techonomy1`, and `rss_feeds_techonomy2`: lists of URLs of the RSS feeds you want to fetch.
-
-You also need to set the database configuration in `db_config.py`:
-
--   `host`, `dbname`, `user`, and `password`: the host name, database name, user name, and password for the PostgreSQL database, respectively.
+Also in `config.py` file:
+```python
+bot_token = "<bot_token>"
+channel_id1 = "<channel_id1>"
+channel_id2 = "<channel_id2>"
+...
+```
+In `rss_links.py` file:
+```python
+rss_tech1 = ["<rss_feed_1>", "<rss_feed_2>", ...]
+rss_tech2 = ["<rss_feed_1>", "<rss_feed_2>", ...]
+...
+```
 
 ## Usage
 
@@ -34,4 +52,8 @@ To run the script, execute the following command in your terminal:
 python bot.py
 ```
 
-The script will run continuously and post the latest entries from the RSS feeds to the Telegram channels every 1 minute. Error messages will be logged to `bot.log`.
+## Note
+
+-   The bot will only send the first entry of each RSS feed.
+-   The bot will keep track of the links of the entries that have already been sent and will not send duplicates.
+-   The links of the entries sent more than 9 days ago will be deleted from the database.

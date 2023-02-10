@@ -11,11 +11,10 @@ logging.basicConfig(filename='bot.log', level=logging.ERROR)
 
 # Import configuration
 import db_config
-from config import channel_id1, bot_token1, channel_id2, bot_token2
-from rss_links import rss_feeds_wide1, rss_feeds_wide2, rss_feeds_techonomy1, rss_feeds_techonomy2
+from config import bot_token, channel_id1, channel_id2, channel_id3, channel_id4
+from rss_links import rss_ukraine1, rss_ukraine2, rss_wide1, rss_wide2, rss_tech1, rss_tech2, rss_economics1, rss_economics2
 
-bot1 = telebot.TeleBot(bot_token1)
-bot2 = telebot.TeleBot(bot_token2)
+bot = telebot.TeleBot(bot_token)
 
 # Connect to the database
 conn = psycopg2.connect(f"host={db_config.host} dbname={db_config.dbname} user={db_config.user} password={db_config.password}")
@@ -27,7 +26,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS sent_links
 conn.commit()
 
 
-def send_new_entries(bot, channel_id, rss_feeds):
+def send_new_entries(channel_id, rss_feeds):
     for feed_url in rss_feeds:
         # Fetch the RSS feed
         try:
@@ -57,7 +56,7 @@ def send_new_entries(bot, channel_id, rss_feeds):
             logging.error(f"No entries found in the feed {feed_url}")
 
 
-def send_new_entries_no_description(bot, channel_id, rss_feeds):
+def send_new_entries_no_description(channel_id, rss_feeds):
     for feed_url in rss_feeds:
         # Fetch the RSS feed
         try:
@@ -96,11 +95,28 @@ def delete_old_entries():
     conn.commit()
 
 
+# tasks = [(send_new_entries, channel_id1, rss_ukraine1), \
+#         (send_new_entries_no_description, channel_id1, rss_ukraine2), \
+#         (send_new_entries, channel_id2, rss_tech1), \
+#         (send_new_entries_no_description, channel_id2, rss_tech2), \
+#         (send_new_entries, channel_id3, rss_wide1), \
+#         (send_new_entries_no_description, channel_id3, rss_wide2), \
+#         (send_new_entries, channel_id4, rss_economics1), \
+#         (send_new_entries_no_description, channel_id4, rss_economics2)]
+
+# for task in tasks:
+#     schedule.every(1).minute.do(*task)
+
+
 # Schedule the task to run every 1 minute
-schedule.every(1).minutes.do(send_new_entries, bot1, channel_id1, rss_feeds_wide1)
-schedule.every(1).minutes.do(send_new_entries_no_description, bot1, channel_id1, rss_feeds_wide2)
-schedule.every(1).minutes.do(send_new_entries, bot2, channel_id2, rss_feeds_techonomy1)
-schedule.every(1).minutes.do(send_new_entries_no_description, bot2, channel_id2, rss_feeds_techonomy2)
+schedule.every(1).minutes.do(send_new_entries, channel_id1, rss_ukraine1)
+schedule.every(1).minutes.do(send_new_entries_no_description, channel_id1, rss_ukraine2)
+schedule.every(1).minutes.do(send_new_entries, channel_id2, rss_tech1)
+schedule.every(1).minutes.do(send_new_entries_no_description, channel_id2, rss_tech2)
+schedule.every(1).minutes.do(send_new_entries, channel_id3, rss_wide1)
+schedule.every(1).minutes.do(send_new_entries_no_description, channel_id3, rss_wide2)
+schedule.every(1).minutes.do(send_new_entries, channel_id4, rss_economics1)
+schedule.every(1).minutes.do(send_new_entries_no_description, channel_id4, rss_economics2)
 
 # Schedule the task to run every 5 days
 schedule.every(5).days.do(delete_old_entries)
